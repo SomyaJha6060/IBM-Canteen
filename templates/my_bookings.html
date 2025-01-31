@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bookings-container">
+    <div class="bookings-card">
+        <h1>My Bookings</h1>
+        
+        {% if bookings %}
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Booking Time</th>
+                        <th>Time Slot</th>
+                        <th>Seat Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.booking_date }}</td>
+                        <td>{{ booking.booking_time }}</td>
+                        <td>{{ booking.time_slot }}</td>
+                        <td>{{ booking.seat_number }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No bookings found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+    .bookings-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 120px);
+    }
+    .bookings-card {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        padding: 40px;
+        width: 100%;
+        max-width: 800px;
+    }
+    .bookings-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .bookings-table th, 
+    .bookings-table td {
+        border: 1px solid #e0e0e0;
+        padding: 12px;
+        text-align: left;
+    }
+    .bookings-table th {
+        background-color: #f4f4f4;
+        font-weight: 600;
+    }
+    .bookings-table tr:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}

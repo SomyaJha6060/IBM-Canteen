@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="thank-you-container">
+    <div class="thank-you-card">
+        <div class="success-icon">✓</div>
+        <h1>Booking Confirmed!</h1>
+        
+        <div class="booking-details">
+            <h2>Your Reservation Details</h2>
+            <div class="detail-item">
+                <span class="label">Seat Number:</span>
+                <span class="value">{{ seat_number }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Time Slot:</span>
+                <span class="value">{{ time_slot }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Date:</span>
+                <span class="value">{{ booking_date }}</span>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{{ url_for('homepage') }}" class="btn-primary">Go to Homepage</a>
+            <a href="{{ url_for('book_seats') }}" class="btn-secondary">Book Another Seat</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+    .thank-you-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 120px);
+        padding: 20px;
+    }
+
+    .thank-you-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .success-icon {
+        background-color: #28a745;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        margin: 0 auto 20px;
+    }
+
+    .thank-you-card h1 {
+        color: var(--ibm-blue);
+        margin-bottom: 30px;
+    }
+
+    .booking-details {
+        background-color: #f8f9fa;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: left;
+    }
+
+    .booking-details h2 {
+        font-size: 1.2em;
+        color: var(--ibm-blue);
+        margin-bottom: 15px;
+    }
+
+    .detail-item {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px 0;
+        padding: 8px 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .detail-item:last-child {
+        border-bottom: none;
+    }
+
+    .label {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .value {
+        color: #212529;
+    }
+
+    .action-buttons {
+        margin-top: 30px;
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .btn-primary, .btn-secondary {
+        padding: 10px 20px;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: var(--ibm-blue);
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-primary:hover, .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+</style>
+{% endblock %}

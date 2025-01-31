@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="book-seats-container">
+    <div class="book-seats-card">
+        <h1>Book a Seat</h1>
+        
+        {% if time_slots %}
+            <form action="{{ url_for('book_seats') }}" method="POST" class="time-slot-form">
+                <div class="form-group">
+                    <label for="time_slot_id">Choose a Time Slot:</label>
+                    <select name="time_slot_id" id="time_slot_id" required>
+                        {% for time_slot in time_slots %}
+                            <option value="{{ time_slot['t_id'] }}">{{ time_slot['timeslot'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">View Seats</button>
+            </form>
+        
+        {% elif seats %}
+            <h2>Select Your Seat</h2>
+            
+            <div class="seat-selection">
+                <form id="seatForm" action="{{ url_for('book_seats') }}" method="POST" class="seat-form">
+                    <input type="hidden" name="time_slot_id" value="{{ time_slot_id }}">
+                    <div class="seat-grid">
+                        {% for seat in seats %}
+                            <button 
+                                type="button" 
+                                class="seat-box {% if seat.seat_status %}booked{% endif %}" 
+                                onclick="confirmBooking('{{ seat.s_id }}')"
+                                {% if seat.seat_status %}disabled{% endif %}
+                            >
+                                {{ seat.seat_number }}
+                            </button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="seat_number" id="selected_seat">
+                </form>
+            </div>
+            
+            <div class="seat-actions">
+                <a href="{{ url_for('book_seats') }}" class="btn-secondary">Choose Another Time Slot</a>
+            </div>
+
+            <!-- Confirmation Dialog -->
+            <div id="confirmDialog" class="modal">
+                <div class="modal-content">
+                    <h3>Confirm Booking</h3>
+                    <p>Do you want to book this seat for the selected time slot?</p>
+                    <div class="modal-buttons">
+                        <button onclick="submitBooking()" class="btn-primary">Yes, Book It</button>
+                        <button onclick="closeDialog()" class="btn-secondary">No, Cancel</button>
+                    </div>
+                </div>
+            </div>
+        
+        {% else %}
+            <p>No available time slots at the moment.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+    .seat-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+        width:60%;
+    }
+    .seat-box {
+        width: 50px;
+        height: 50px;
+        border: 2px solid var(--ibm-blue);
+        background-color: transparent;
+        color: var(--ibm-blue);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+   
+
+    .seat-box:disabled {
+        background-color: #d3d3d3; /* Gray color for disabled seats */
+        color: #777474;
+        cursor: not-allowed;
+    }
+    
+    .seat-box:not(.booked):focus,
+    .seat-box:not(.booked).selected {
+        background-color: var(--ibm-blue);
+        color: white;
+    }
+    .seat-box.booked {
+        background-color: #d3d3d3;
+        border-color: #c1c7cc;
+        color: #777474;
+        cursor: not-allowed;
+    }
+
+    .book-seats-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 120px);
+    }
+    .book-seats-card {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        padding: 40px;
+        width: 100%;
+        max-width: 600px;
+    }
+    .time-slot-form,
+    .seat-selection {
+        margin-top: 20px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #c1c7cc;
+        border-radius: 4px;
+    }
+
+    .seat-actions {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .btn-secondary {
+        display: inline-block;
+        background-color: #6f6f6f;
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+    .btn-secondary:hover {
+        background-color: #4d4d4d;
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 4px;
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .modal-buttons button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: var(--ibm-blue);
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #6f6f6f;
+        color: white;
+    }
+
+    .seat-box:disabled {
+        pointer-events: none;
+    }
+</style>
+
+<script>
+    function confirmBooking(seatId) {
+        // Don't show confirmation for already booked seats
+        const seatButton = event.target;
+        if (seatButton.classList.contains('booked')) {
+            return;
+        }
+        
+        document.getElementById('selected_seat').value = seatId;
+        document.getElementById('confirmDialog').style.display = 'block';
+    }
+
+    function closeDialog() {
+        document.getElementById('confirmDialog').style.display = 'none';
+        document.getElementById('selected_seat').value = '';
+    }
+
+    function submitBooking() {
+        document.getElementById('seatForm').submit();
+    }
+
+    // Close modal if user clicks outside of it
+    window.onclick = function(event) {
+        var modal = document.getElementById('confirmDialog');
+        if (event.target == modal) {
+            closeDialog();
+        }
+    }
+</script>
+{% endblock %}

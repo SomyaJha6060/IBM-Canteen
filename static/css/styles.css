@@ -1,0 +1,198 @@
+:root {
+    --ibm-blue: #0f62fe;
+    --ibm-blue-hover: #0043ce;
+    --ibm-gray: #f4f4f4;
+    --ibm-text-dark: #161616;
+    --shadow-elevation-1: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-elevation-2: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-elevation-3: 0 8px 16px rgba(0, 0, 0, 0.2);
+    --transition-smooth: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: var(--transition-smooth);
+}
+
+body {
+    font-family: 'IBM Plex Sans', Arial, sans-serif;
+    line-height: 1.6;
+    background-color: var(--ibm-gray);
+    color: var(--ibm-text-dark);
+}
+
+header {
+    background: transparent;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+}
+
+nav ul {
+    display: none;
+}
+
+.logged-in header nav ul {
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--ibm-text-dark);
+    font-weight: 600;
+    transition: color 0.3s;
+    position: relative;
+}
+
+nav ul li a:hover {
+    color: var(--ibm-blue);
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: var(--ibm-blue);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+nav ul li a:hover::after {
+    transform: scaleX(1);
+}
+
+.auth-container, 
+.dashboard-container,
+.bookings-container,
+.seats-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 120px);
+}
+
+.auth-box, 
+.dashboard-card,
+.bookings-card,
+.seats-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow-elevation-3);
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    transform: perspective(1000px) rotateX(-2deg);
+    transition: transform 0.4s, box-shadow 0.4s;
+}
+
+.auth-box:hover, 
+.dashboard-card:hover,
+.bookings-card:hover,
+.seats-card:hover {
+    transform: perspective(1000px) rotateX(0);
+    box-shadow: var(--shadow-elevation-2);
+}
+
+.btn-primary, 
+.btn-secondary {
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: var(--shadow-elevation-1);
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--ibm-blue);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--ibm-blue-hover);
+    box-shadow: var(--shadow-elevation-2);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #6f6f6f;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #4d4d4d;
+    box-shadow: var(--shadow-elevation-2);
+    transform: translateY(-2px);
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    box-shadow: var(--shadow-elevation-1);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* NEW INPUT STYLES */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--ibm-text-dark);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: var(--ibm-blue);
+    box-shadow: 0 0 0 3px rgba(15, 98, 254, 0.1);
+}
+
+.form-group input:hover {
+    border-color: var(--ibm-blue);
+}
+
+.error-message {
+    color: #da1e28;
+    margin-top: 10px;
+    font-size: 14px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,5 @@
+pip install -r requirements.txt
+canteen-busers will start with by logging in, which will redirect them to the ibm oauth page
+decide a success and a failure case for both
+in the case of failure-> it should go back to the original login page and display an error message
+in the case of success-> it should show the tables available in the restaurant

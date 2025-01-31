@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <div class="welcome-section">
+            <div class="profile-circle">
+                {{ session.get('full_name', '')|first|upper if session.get('full_name') else 'U' }}
+            </div>
+            <h1>Welcome, {{ session.get('full_name', 'User') }}!</h1>
+            <p class="subtitle">IBM Seat Booking Dashboard</p>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="dashboard-card book-seats">
+            <div class="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 10V7C20 5.9 19.1 5 18 5H6C4.9 5 4 5.9 4 7V10C2.9 10 2 10.9 2 12V17H3.33L4 19H5L5.67 17H18.33L19 19H20L20.67 17H22V12C22 10.9 21.1 10 20 10ZM11 10H6V7H11V10ZM18 10H13V7H18V10Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <h2>Book Seats</h2>
+            <p>Reserve your workspace for the day</p>
+            <a href="{{ url_for('book_seats') }}" class="card-button">Book Now</a>
+        </div>
+
+        <div class="dashboard-card my-bookings">
+            <div class="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.89 21 5 21H19C20.11 21 21 20.1 21 19V5C21 3.9 20.11 3 19 3ZM17 13H7V11H17V13Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <h2>My Bookings</h2>
+            <p>View and manage your reservations</p>
+            <a href="{{ url_for('my_bookings') }}" class="card-button">View Bookings</a>
+        </div>
+    </div>
+
+    <div class="logout-section">
+        <a href="{{ url_for('logout') }}" class="logout-button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.58L17 17L22 12L17 7ZM4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z" fill="currentColor"/>
+            </svg>
+            Logout
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+    .dashboard-container {
+        min-height: calc(100vh - 80px);
+        padding: 40px 20px;
+        background-color: #f5f7fa;
+    }
+
+    .dashboard-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .welcome-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .profile-circle {
+        width: 80px;
+        height: 80px;
+        background-color: var(--ibm-blue);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .welcome-section h1 {
+        color: var(--ibm-text-dark);
+        font-size: 28px;
+        margin: 0;
+    }
+
+    .subtitle {
+        color: #6f6f6f;
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .dashboard-card {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-icon {
+        background-color: rgba(0, 62, 255, 0.1);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: var(--ibm-blue);
+    }
+
+    .dashboard-card h2 {
+        color: var(--ibm-text-dark);
+        font-size: 20px;
+        margin: 0 0 10px 0;
+    }
+
+    .dashboard-card p {
+        color: #6f6f6f;
+        margin: 0 0 25px 0;
+        font-size: 14px;
+    }
+
+    .card-button {
+        display: inline-block;
+        background-color: var(--ibm-blue);
+        color: white;
+        text-decoration: none;
+        padding: 12px 30px;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+    .card-button:hover {
+        background-color: #0043ce;
+    }
+
+    .logout-section {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .logout-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #f44336;
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+    .logout-button:hover {
+        background-color: #d32f2f;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+            padding: 10px;
+        }
+
+        .welcome-section h1 {
+            font-size: 24px;
+        }
+
+        .profile-circle {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+        }
+    }
+</style>
+{% endblock %}
