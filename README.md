@@ -1,5 +1,7 @@
 IBM Canteen Application
 
+![Description](static/home.png)
+
 # Create virtual environment 
 ```
 python -m venv venv
