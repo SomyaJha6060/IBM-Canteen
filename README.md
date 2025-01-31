@@ -1,14 +1,14 @@
-IBM Canteen Application
+# IBM Canteen Application
 
 ![Description](static/home.png)
 
-# Create virtual environment 
+## Create virtual environment 
 ```
 python -m venv venv
 venv\Scripts\activate
 ```
 
-# Install the requirements
+## Install the requirements
 ```
 pip freeze requirements.txt
 pip install -r requirements.txt
